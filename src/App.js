@@ -56,6 +56,8 @@ const psiProtocol = (setBobValues, setAliceValues, setAliceRandomValues, setResu
     const k_v = H2(o_k_v); // k_v = H2(o_k(v))
 
     // Check if o_k(v) matches one of Bob's units
+    // WARNING: Alice doesn't actually have access to bobKeys. This is only done here for demo purposes.
+    // In a real protocol run she would decrypt the ciphertexts with the keys and check what is revealed.
     const matchingBobUnit = bobKeys.find(({ k_u }) => k_u === k_v);
     return matchingBobUnit ? { unit: aliceUnits[index], k_v } : null;
   }).filter(Boolean);
