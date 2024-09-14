@@ -15,6 +15,9 @@ Additionally, there would need to be a dispute resolution protocol on order to a
 
 The overall top-level stragey is outlined in a blog I wrote in June 2020: [Preventing cheaters in Fog Of War Games](https://edward-thomson.medium.com/preventing-cheaters-in-fog-of-war-games-69f202fbe107).
 
+## PSI Explainer
+I put together a page that explains more of the details of what PSI is and how it works: [PSI Explainer](./explanations/psi_explainer.md).
+
 ## Installation
 
 1. Clone the repository:
@@ -45,5 +48,6 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 
 
 ## Acknowledgements
+- Anuj Gupta, the researcher who shared this idea with me.
 - ChatGPT
 - Everyone at the Decentralized Gaming Association [DGA Discord](https://discord.com/invite/eZEVrSd)
