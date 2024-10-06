@@ -13,10 +13,24 @@ One deficiency of the OpenConflict solution is that it has no protection against
 
 Additionally, there would need to be a dispute resolution protocol on order to adjudicate in times when one player disagrees with another. This would happen when one player cheats and then denies it.
 
-The overall top-level stragey is outlined in a blog I wrote in June 2020: [Preventing cheaters in Fog Of War Games](https://edward-thomson.medium.com/preventing-cheaters-in-fog-of-war-games-69f202fbe107).
+The overall top-level strategy is outlined in a blog I wrote in June 2020: [Preventing cheaters in Fog Of War Games](https://edward-thomson.medium.com/preventing-cheaters-in-fog-of-war-games-69f202fbe107).
 
-## PSI Explainer
+### PSI Explainer
 I put together a page that explains more of the details of what PSI is and how it works: [PSI Explainer](./explanations/psi_explainer.md).
+
+## Using This App
+
+### Home Page
+A demonstration of the protocol working. The units and visibility are static / simple points. Just hit the "Run" button. 
+
+### PSI Visualization
+This is a simple visualization of simple point particles moving around inside a box (Bob's units). The visibility circles are static but sweep out a 2D area unlike the test on the home page. The code is inefficient at the moment but it shows that the protocol works with dynamic movement. The PSI code triggers every 5 seconds and is very slow to calculate (**causes huge visualization lag**).
+
+In order to boost performance, the app converts positions and visibility to cells, which are a coarser representation of the pixels. 1 cell is 50x50 pixels.
+
+There are peerhaps two main sources of inefficiency, one is that the app generates random values at every point in a secure yet inefficient way (the private key from a key pair), and secondly that the code has to decrypt all packets with every movement.
+
+The first can be solved by generating one random value then hashing it for the other points. The second may require reducing key size since the period of a game only requires secrecy for a few hours at most in an RTS. Slower games don't require fast visualization, so it would be fine to have such key-length redundancy (consider strategy games like Civilization).
 
 ## Installation
 
@@ -24,7 +38,7 @@ I put together a page that explains more of the details of what PSI is and how i
 
 ```bash
  git clone https://github.com/EdwardAThomson/psi-demo.git
- cd vrf-loot-generator
+ cd psi-demo
 ```
 
 2. Install dependencies:
@@ -48,6 +62,8 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 
 
 ## Acknowledgements
+Many thanks to the following people:
+
 - Anuj Gupta, the researcher who shared this idea with me.
 - ChatGPT
 - Everyone at the Decentralized Gaming Association [DGA Discord](https://discord.com/invite/eZEVrSd)

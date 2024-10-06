@@ -1,4 +1,4 @@
-# Private Set Intersection (PSI)Explanation page
+# Private Set Intersection (PSI) Explanation page
 
 ## Private Set Intersection (PSI) Overview
 Private Set Intersection (PSI) is a cryptographic technique that allows two parties to find common elements in their datasets without revealing any non-matching items. This process ensures privacy, as neither party learns anything about the other’s data beyond the shared elements.
@@ -23,7 +23,7 @@ Here is a deeper dive into the protocol details. As it is a pain to copy and pas
 
 ## Key Concepts
 
-### Concept of HashToGroup
+### Concept of HashToGroup:
 In the research paper there is a hash function, **H1**, which is somewhat different from a regular hash function.
 
 **HashToGroup** typically means hashing an input (like a string or integer) to an element in a cryptographic group. In our case, the group is the elliptic curve group 𝐺, consisting of elliptic curve points.
@@ -43,7 +43,7 @@ It doesn't generate a scalar like in your VRF code, but instead hashes an ellipt
 The input (which is often an elliptic curve point, or something derived from it) is hashed to a bit string (e.g., using SHA-256 or SHA-512). This bit string could then be used as a key, for example.
 
 
-### Elliptic Curve Choice
+### Elliptic Curve Choice:
 
 #### p256
 
@@ -60,7 +60,7 @@ This curve is known for being used in Bitcoin, Ethereum and other cryptocurrenci
 
 It has the same 128-bit security level as p256, but it's optimized for certain mathematical operations like elliptic curve multiplications, so should be more performant, which is why it's popular in the blockchain world.
 
-### Encrypting units via symmetric encryption
+### Encrypting units via symmetric encryption:
 
 #### Stream Cipher ChaCha20
 Using a stream cipher like [ChaCha20](https://en.wikipedia.org/wiki/Salsa20) is an excellent choice for encrypting and decrypting data, as it’s fast, secure, and widely used in cryptographic systems. In the context of the PSI protocol, Bob will encrypt his unit positions, and Alice will attempt to decrypt the ciphertexts using the keys she calculates during the protocol.
