@@ -11,3 +11,46 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Roguelike Game Styles */
+.roguelike-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.game-status {
+  display: flex;
+  justify-content: space-between;
+  background-color: #222;
+  color: #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.game-status p {
+  margin: 0 10px;
+}
+
+.game-instructions {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.game-instructions h2 {
+  margin-top: 0;
+}
+
+.game-instructions ul {
+  padding-left: 20px;
+}
+
+canvas {
+  border: 2px solid #333;
+  background-color: #111;
+  display: block;
+  margin: 0 auto;
+}

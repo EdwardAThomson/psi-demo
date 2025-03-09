@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import PSIVisualization from './PSIVisualization';
 import HomePage from "./HomePage";
+import Roguelike from './Roguelike';
 
 import PSIProtocol from "./psiCalculation";
 
@@ -11,13 +12,19 @@ import PSIProtocol from "./psiCalculation";
   const bobUnits = [
     { id: 'u1', x: 100, y: 100 },
     { id: 'u2', x: 200, y: 200 },
-    { id: 'u3', x: 450, y: 350 },
+    { id: 'u3', x: 450, y: 450 },
   ];
 
   const aliceUnits = [
     { id: 'u1', x: 150, y: 150 },
     { id: 'u2', x: 250, y: 250 },
-    { id: 'u3', x: 450, y: 350 },
+    { id: 'u3', x: 350, y: 350 },
+    { id: 'u4', x: 450, y: 450 },
+    { id: 'u5', x: 451, y: 450 },
+    { id: 'u6', x: 452, y: 450 },
+    { id: 'u7', x: 453, y: 450 },
+    { id: 'u8', x: 454, y: 450 },
+    { id: 'u9', x: 455, y: 450 },
   ];
 
 
@@ -60,6 +67,9 @@ function App() {
             <li>
               <Link to="/visualization">PSI Visualization</Link>
             </li>
+            <li>
+              <Link to="/roguelike">PSI Roguelike</Link>
+            </li>
           </ul>
         </nav>
 
@@ -73,6 +83,7 @@ function App() {
 
           />} /> {/* Render the home page */}
           <Route path="/visualization" element={<PSIVisualization />} />
+          <Route path="/roguelike" element={<Roguelike />} />
 
         </Routes>
       </div>
