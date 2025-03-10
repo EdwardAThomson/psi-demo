@@ -28,15 +28,23 @@ A demonstration of the protocol working. The units and visibility are static / s
 ### PSI Visualization
 This is a simple visualization of simple point particles moving around inside a box (Bob's units). The visibility circles are static but sweep out a 2D area unlike the test on the home page. The code is inefficient at the moment but it shows that the protocol works with dynamic movement. The PSI code triggers every 5 seconds and is very slow to calculate (**causes huge visualization lag**).
 
-In order to boost performance, the app converts positions and visibility to cells, which are a coarser representation of the pixels. 1 cell is 50x50 pixels.
+In order to boost performance, the app converts positions and visibility to cells, which are a coarser representation of the pixels. 1 cell is 50x50 pixels. Update (9th March): I added multi-level meshing and web workers to boost performance. While the performance is much better, it is still a bit slow.
 
-There are peerhaps two main sources of inefficiency, one is that the app generates random values at every point in a secure yet inefficient way (the private key from a key pair), and secondly that the code has to decrypt all packets with every movement.
+There are perhaps two main sources of inefficiency, one is that the app generates random values at every point in a secure yet inefficient way (the private key from a key pair), and secondly that the code has to decrypt all packets with every movement.
 
 The first can be solved by generating one random value then hashing it for the other points. The second may require reducing key size since the period of a game only requires secrecy for a few hours at most in an RTS. Slower games don't require fast visualization, so it would be fine to have such key-length redundancy (consider strategy games like Civilization).
 
 ![PSI Visualization](explanations/PSI_Visualization_20241006.png)
 
 There are is a traditional visibility calculation that is helpful to calibrate what should be seen. You should really open the console log to check the results.
+
+### Roguelike Demo
+I added a very simple demo game. It is a Roguelike where a player can move around a room to find monsters. Whenever a monster comes into the field of view, it will render only if the PSI calculation confirms it.
+
+The code doesn't have great performance but I believe it works.
+
+![PSI Roguelike](explanations/PSI_Roguelike_Screenshot_20250309_232639.png)
+
 
 ## Installation
 
