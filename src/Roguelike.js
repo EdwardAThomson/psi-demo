@@ -9,7 +9,7 @@ const GRID_WIDTH = 30; // Number of cells horizontally
 const GRID_HEIGHT = 30; // Number of cells vertically
 const CANVAS_WIDTH = GRID_WIDTH * GRID_SIZE;
 const CANVAS_HEIGHT = GRID_HEIGHT * GRID_SIZE;
-const VISIBILITY_RADIUS = 4; // How many cells the player can see
+const VISIBILITY_RADIUS = 5; // How many cells the player can see
 
 // Convert screen coordinates to grid coordinates
 const screenToGrid = (x, y) => ({

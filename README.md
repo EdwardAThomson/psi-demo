@@ -4,6 +4,8 @@ A minimally working demonstration of a Private Set Intersection (PSI).
 
 The aim is to prove this can work in a Real Time Strategy game, as shown in the research paper [OpenConflict: Preventing Real Time Map Hacks in Online Games](https://www.shiftleft.org/papers/openconflict/).
 
+There is a live demo here: [PSI Demo @ Vercel](https://psi-demo-delta.vercel.app/) (hopefully not broken! :-) )
+
 ## Description
 This code is a simple demonstration of how PSI calculations work. It is currently missing the symmetric encryption part, however, that is trivial given that generating the shared keys from the private interections is difficult.
 
