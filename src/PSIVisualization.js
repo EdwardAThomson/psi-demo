@@ -410,7 +410,7 @@ const PSIVisualization = () => {
       if (processingStatus === 'idle' || processingStatus === 'error') {
         runMultiLevelPSI();
       }
-    }, 5000);  // Run every 5 seconds
+    }, 1000);  // Run every 5 seconds
     
     return () => {
       console.log("Clearing PSI calculation interval");

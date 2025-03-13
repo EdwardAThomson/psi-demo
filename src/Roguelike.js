@@ -9,7 +9,7 @@ const GRID_WIDTH = 30; // Number of cells horizontally
 const GRID_HEIGHT = 30; // Number of cells vertically
 const CANVAS_WIDTH = GRID_WIDTH * GRID_SIZE;
 const CANVAS_HEIGHT = GRID_HEIGHT * GRID_SIZE;
-const VISIBILITY_RADIUS = 5; // How many cells the player can see
+const VISIBILITY_RADIUS = 4; // How many cells the player can see
 
 // Convert screen coordinates to grid coordinates
 const screenToGrid = (x, y) => ({
@@ -175,7 +175,7 @@ const Roguelike = () => {
     };
     
     // Run the detection after a small delay to avoid state issues
-    const timerId = setTimeout(detectMonsters, 50);
+    const timerId = setTimeout(detectMonsters, 10);
     
     // Return cleanup function
     return () => {
@@ -323,7 +323,7 @@ const Roguelike = () => {
     
     // Don't run PSI more than once per second
     const now = Date.now();
-    if (now - lastRunRef.current < 1000) return;
+    if (now - lastRunRef.current < 500) return;
     
     lastRunRef.current = now;
     runMonsterDetection();
@@ -428,6 +428,7 @@ const Roguelike = () => {
       
       <div className="game-instructions">
         <h2>Roguelike with PSI-based Monster Detection</h2>
+        <p>Warning! This demo is very slow. It is not optimized for performance.</p>
         <p>This demo shows how PSI can be used for secure fog-of-war in games:</p>
         <ul>
           <li>Green circle is your character. Use arrow keys or WASD to move.</li>
@@ -437,6 +438,7 @@ const Roguelike = () => {
           <li>The PSI protocol only reveals monsters when they are in your field of view.</li>
           <li>Monsters outside your field of view remain hidden and secure.</li>
         </ul>
+        <p>You can find monsters at: (13, 13), (17, 17), (12, 18), (18, 12), (10, 10), (20, 20)</p>
       </div>
     </div>
   );

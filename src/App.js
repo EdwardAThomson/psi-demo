@@ -1,94 +1,26 @@
-import React, { useState, useEffect } from 'react';
-
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PSIVisualization from './PSIVisualization';
-import HomePage from "./HomePage";
+import LandingPage from './LandingPage';
 import Roguelike from './Roguelike';
-
-import PSIProtocol from "./psiCalculation";
-
-
-  // static positions for the home page test
-  const bobUnits = [
-    { id: 'u1', x: 100, y: 100 },
-    { id: 'u2', x: 200, y: 200 },
-    { id: 'u3', x: 450, y: 450 },
-  ];
-
-  const aliceUnits = [
-    { id: 'u1', x: 150, y: 150 },
-    { id: 'u2', x: 250, y: 250 },
-    { id: 'u3', x: 350, y: 350 },
-    { id: 'u4', x: 450, y: 450 },
-    { id: 'u5', x: 451, y: 450 },
-    { id: 'u6', x: 452, y: 450 },
-    { id: 'u7', x: 453, y: 450 },
-    { id: 'u8', x: 454, y: 450 },
-    { id: 'u9', x: 455, y: 450 },
-  ];
-
+import RawCalculationDemo from './RawCalculationDemo';
+import Navbar from './Navbar';
 
 function App() {
-  const [bobValues, setBobValues] = useState([]);
-  const [aliceValues, setAliceValues] = useState([]);
-  const [aliceRandomValues, setAliceRandomValues] = useState([]); // Track Alice's random values
-  const [results, setResults] = useState([]);
-
-
-
-    const runPSIProtocol = () => {
-    console.log('start PSI Protocol -- App.js');
-
-    // setResults is the array of decrypted Units
-    PSIProtocol(bobUnits, aliceUnits, setBobValues, setAliceValues, setAliceRandomValues, setResults);
-  };
-
-
-/*  --- future upgrade
-    const runPSIProtocol = async () => {
-      // Call the PSIProtocol function and await it
-      await PSIProtocol(bobUnits, aliceUnits, setBobValues, setAliceValues, setAliceRandomValues, setResults);
-    };
-
-  useEffect(() => {
-    // Run the async function
-    runPSIProtocol();
-  }, [bobUnits, aliceUnits]);  // Make sure the useEffect re-runs when bobUnits or aliceUnits change
-*/
-
   return (
-     <Router>
-      <div className="App">
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/visualization">PSI Visualization</Link>
-            </li>
-            <li>
-              <Link to="/roguelike">PSI Roguelike</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <Routes>
-              <Route path="/" element={<HomePage
-                  runPSIProtocol={runPSIProtocol}  // Now it's consistent
-                  bobValues={bobValues}
-                  aliceValues={aliceValues}
-                  aliceRandomValues={aliceRandomValues}
-                  results={results}
-
-          />} /> {/* Render the home page */}
-          <Route path="/visualization" element={<PSIVisualization />} />
-          <Route path="/roguelike" element={<Roguelike />} />
-
-        </Routes>
+    <Router>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Navbar />
+        <div style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/visualization" element={<PSIVisualization />} />
+            <Route path="/roguelike" element={<Roguelike />} />
+            <Route path="/raw-calculation" element={<RawCalculationDemo />} />
+          </Routes>
+        </div>
       </div>
     </Router>
-
   );
 }
 
