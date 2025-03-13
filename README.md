@@ -17,6 +17,17 @@ Additionally, there would need to be a dispute resolution protocol on order to a
 
 The overall top-level strategy is outlined in a blog I wrote in June 2020: [Preventing cheaters in Fog Of War Games](https://edward-thomson.medium.com/preventing-cheaters-in-fog-of-war-games-69f202fbe107).
 
+### Implementation choices
+
+Here are a few of the technical Implementation choices that I made in this app.
+
+* ChaCha20 Stream Cipher
+* Blake3 hash function
+* Multi-level grid system
+* Web workers
+
+These were picked for their speed of operation or to otherwise reduce overheads. In the future I probably need to look to Wasm, or otherwise creating a desktop app.
+
 ### PSI Explainer
 I put together a page that explains more of the details of what PSI is and how it works: [PSI Explainer](./explanations/psi_explainer.md).
 
