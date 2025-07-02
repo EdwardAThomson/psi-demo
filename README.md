@@ -7,9 +7,7 @@ The aim is to prove this can work in a Real Time Strategy game, as shown in the 
 There is a live demo here: [PSI Demo @ Vercel](https://psi-demo-delta.vercel.app/) (hopefully not broken! :-) )
 
 ## Description
-This code is a simple demonstration of how PSI calculations work. It is currently missing the symmetric encryption part, however, that is trivial given that generating the shared keys from the private interections is difficult.
-
-An obvious next step is to add the encryption steps. That would make the code on par (roughly) with the PSI protocol in the OpenConflict paper.
+This code is a simple demonstration of how PSI calculations work.
 
 One deficiency of the OpenConflict solution is that it has no protection against players who lie about their positions or visibility. I think the problem of lying is one that can be solved. Essentially, the players would reveal their all their position and visibility sets at the end of the game. Then players can check those against the rules of the game to ensure the calculations were correct and fit with the physics of the game.
 
