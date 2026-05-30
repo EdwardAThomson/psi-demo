@@ -1,0 +1,33 @@
+# Roadmap — Private Set Intersection Demo
+
+_Status: active · updated 2026-05-30_
+
+A React demo of the Private Set Intersection protocol from *OpenConflict: Preventing
+Real Time Map Hacks in Online Games* — interactive visualization, a roguelike demo,
+and a raw-calculation walkthrough. The C++ port lives in the sibling `PSI_Cpp` repo.
+
+## Shipped
+
+- [x] Raw-calculation demo (protocol walkthrough, intermediate values, timing)
+- [x] PSI visualization (Konva canvas, moving units + visibility circles, traditional reference)
+- [x] Multi-level grid system (coarse + fine mesh for large datasets)
+- [x] Web Worker integration to offload crypto and keep the UI responsive
+- [x] Roguelike demo game (PSI decides which monsters are visible vs hidden)
+- [x] Explainer docs (EC math, hash-to-group, H2 function, ChaCha20)
+- [x] Cryptographic primitives (ChaCha20-Poly1305, Blake3, p256 EC, key derivation)
+- [x] Live deployment on Vercel
+- [x] Multi-page SPA navigation (Home, Visualization, Roguelike, Raw Calculation)
+
+## Next
+
+- [ ] Optimize random-value generation (single seed + hash chain vs per-unit keygen)
+- [ ] Reduce visualization lag from per-movement decryption overhead
+- [ ] Remove dead code (`TODO` in `PSIVisualization.js`)
+
+## Backlog
+
+- [ ] WebAssembly optimization for performance
+- [ ] Desktop-app alternative to the browser approach
+- [ ] Dispute-resolution protocol
+- [ ] End-of-game position / visibility verification (audit against rules)
+- [ ] Smaller / safer EC keys (reduce key size; consider SafeCurves over p256)
