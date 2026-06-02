@@ -11,18 +11,6 @@ const CANVAS_WIDTH = GRID_WIDTH * GRID_SIZE;
 const CANVAS_HEIGHT = GRID_HEIGHT * GRID_SIZE;
 const VISIBILITY_RADIUS = 5; // How many cells the player can see
 
-// Convert screen coordinates to grid coordinates
-const screenToGrid = (x, y) => ({
-  x: Math.floor(x / GRID_SIZE),
-  y: Math.floor(y / GRID_SIZE)
-});
-
-// Convert grid coordinates to screen coordinates
-const gridToScreen = (x, y) => ({
-  x: x * GRID_SIZE,
-  y: y * GRID_SIZE
-});
-
 // Calculate visibility for a point using a simple distance check
 const calculateVisibility = (playerX, playerY, radius) => {
   const visibleCells = [];
@@ -64,7 +52,7 @@ const Roguelike = () => {
   
   // Game state
   const [player, setPlayer] = useState({ x: 15, y: 15 }); // Player position in grid coordinates
-  const [monsters, setMonsters] = useState([
+  const [monsters] = useState([
     { id: 'm1', x: 13, y: 13 },  // Closer to player's starting position
     { id: 'm2', x: 17, y: 17 },  // Closer to player's starting position
     { id: 'm3', x: 12, y: 18 },  // Within initial visibility radius

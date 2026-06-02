@@ -8,9 +8,6 @@ import naclUtil from 'tweetnacl-util';
 import { hash, load } from 'blake3';
 import BN from 'bn.js';
 
-// Configure global context for the worker
-const ctx = self;
-
 // Create EC context
 const EC = elliptic.ec;
 const ec = new EC('p256');
@@ -130,7 +127,7 @@ const runPSIProtocol = async (data) => {
       
       if (usedKeys.has(naclUtil.encodeBase64(k_v))) return;
       
-      for (const { unit: encryptedUnit, ciphertext, nonce } of bobEncryptedUnits) {
+      for (const { ciphertext, nonce } of bobEncryptedUnits) {
         decryptOperations++;
         const decryptedUnit = decryptWithChaCha20(k_v, ciphertext, nonce);
         if (decryptedUnit) {

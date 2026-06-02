@@ -50,16 +50,6 @@ const convertToPositionString = (x, y) => {
   return `${Math.floor(x)} ${Math.floor(y)}`;
 };
 
-// function for pulling IDs out
-const getIdArray = (units) => {
-  return units.map(unit => unit.id);
-};
-
-// function for pulling positions out
-const getPositionArray = (units) => {
-  return units.map(unit => ({ x: unit.x, y: unit.y }));
-};
-
 // use Blake3 for fast generation for PRNG
 // -- uses Wasm so need to do async await, but doing the load once in main function
 // const deriveRandomValues = async (numValues, randomValue) => {
@@ -169,7 +159,7 @@ const PSIProtocol = async (bobUnits, aliceUnits,  setBobValues, setAliceValues, 
       // console.log("4.2 Second For loop");
       // Decryption
       // Try to decrypt all Bob's encrypted units with k_v
-      for (const { unit: encryptedUnit, ciphertext, nonce } of bobEncryptedUnits) {
+      for (const { ciphertext, nonce } of bobEncryptedUnits) {
         const decryptedUnit = decryptWithChaCha20(k_v, ciphertext, nonce);
         if (decryptedUnit) { // if decryption is successful then this value is not zero / null / falsy
           decryptedUnits.push({ unit: decryptedUnit, k_v });

@@ -23,7 +23,7 @@ const RawCalculationDemo = () => {
 
   const [bobValues, setBobValues] = useState([]);
   const [aliceValues, setAliceValues] = useState([]);
-  const [aliceRandomValues, setAliceRandomValues] = useState([]);
+  const [, setAliceRandomValues] = useState([]);
   const [results, setResults] = useState([]);
   const [calculationTime, setCalculationTime] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Circle, Rect } from 'react-konva';
 import { useLocation } from 'react-router-dom';
-import PSIProtocol from "./psiCalculation";
 import { runPSIInWorker } from './workerAdapter';
 
 const WIDTH = 600;
@@ -73,32 +72,12 @@ const randomVelocity = () => ({
 });
 
 
-// visbilityFunction does not contain hooks, it’s a pure function
-// TODO: Remove this function?
-const visbilityFunction = (bobUnits, aliceUnits) => {
-  const visibleUnits = bobUnits.filter((bobUnit) =>
-    aliceUnits.some((aliceUnit) => isWithinVisibility(aliceUnit, bobUnit, 100))
-  );
-
-  // Return the result (array of visible unit IDs)
-  return visibleUnits.map(unit => unit.id);
-};
-
-
-
 // Main function
 const PSIVisualization = () => {
   // Get current location to determine if this component is active
   const location = useLocation();
 
-  const [bobValues, setBobValues] = useState([]);
-  const [aliceValues, setAliceValues] = useState([]);
-  const [aliceRandomValues, setAliceRandomValues] = useState([]); // Track Alice's random values
   const [results, setResults] = useState([]);  // State to hold the PSI results
-
-  const [bobCells, setBobCells] = useState([]);
-  const [aliceCells, setAliceCells] = useState([]);
-  const [intersectionCells, setIntersectionCells] = useState([]); // Track intersection cells
   const [processingStatus, setProcessingStatus] = useState('idle'); // Track worker status
   const [performanceStats, setPerformanceStats] = useState(null); // Track performance stats
 
@@ -201,12 +180,7 @@ const PSIVisualization = () => {
           
           // Extract the results
           const coarseResults = data.results;
-          setIntersectionCells(coarseResults);
-          
-          // Update state with other worker-computed values
-          setBobValues(data.bobValues);
-          setAliceValues(data.aliceValues);
-          
+
           // Store performance stats from worker
           if (data.performance) {
             setPerformanceStats({
@@ -416,6 +390,7 @@ const PSIVisualization = () => {
       console.log("Clearing PSI calculation interval");
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [processingStatus, isPageActive]);
 
 
