@@ -1,6 +1,6 @@
 # Roadmap — Private Set Intersection Demo
 
-_Status: active · updated 2026-05-30_
+_Status: active · updated 2026-06-02_
 
 A React demo of the Private Set Intersection protocol from *OpenConflict: Preventing
 Real Time Map Hacks in Online Games* — interactive visualization, a roguelike demo,
@@ -17,12 +17,12 @@ and a raw-calculation walkthrough. The C++ port lives in the sibling `PSI_Cpp` r
 - [x] Cryptographic primitives (ChaCha20-Poly1305, Blake3, p256 EC, key derivation)
 - [x] Live deployment on Vercel
 - [x] Multi-page SPA navigation (Home, Visualization, Roguelike, Raw Calculation)
+- [x] Remove dead code (unused vars/functions; fixes the `CI=true` Vercel build)
 
 ## Next
 
 - [ ] Optimize random-value generation (single seed + hash chain vs per-unit keygen)
 - [ ] Reduce visualization lag from per-movement decryption overhead
-- [ ] Remove dead code (`TODO` in `PSIVisualization.js`)
 
 ## Backlog
 

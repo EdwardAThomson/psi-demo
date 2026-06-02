@@ -4,7 +4,11 @@ A minimally working demonstration of a Private Set Intersection (PSI).
 
 The aim is to prove this can work in a Real Time Strategy game, as shown in the research paper [OpenConflict: Preventing Real Time Map Hacks in Online Games](https://www.shiftleft.org/papers/openconflict/).
 
-There is a live demo here: [PSI Demo @ Vercel](https://psi-demo-delta.vercel.app/) (hopefully not broken! :-) )
+There is a live demo here: [PSI Demo @ Vercel](https://psi-demo-delta.vercel.app/).
+
+See the [project roadmap](./ROADMAP.md) for what's shipped and what's planned next.
+
+**Recent updates:** Removed dead code throughout the app and fixed the production build. Create React App treats lint warnings as errors when `CI=true` (Vercel's default), which had been failing the build and taking the live site offline; the cleanup restores a clean deployment.
 
 ## Description
 This code is a simple demonstration of how PSI calculations work.
@@ -39,7 +43,7 @@ A demonstration of the protocol working. The units and visibility are static / s
 ### PSI Visualization
 This is a simple visualization of simple point particles moving around inside a box (Bob's units). The visibility circles are static but sweep out a 2D area unlike the test on the home page. The code is inefficient at the moment but it shows that the protocol works with dynamic movement. The PSI code triggers every 5 seconds and is very slow to calculate (**causes huge visualization lag**).
 
-In order to boost performance, the app converts positions and visibility to cells, which are a coarser representation of the pixels. 1 cell is 50x50 pixels. Update (9th March): I added multi-level meshing and web workers to boost performance. While the performance is much better, it is still a bit slow.
+In order to boost performance, the app converts positions and visibility to cells, which are a coarser representation of the pixels. 1 cell is 50x50 pixels. I later added multi-level meshing and web workers to boost performance. While the performance is much better, it is still a bit slow.
 
 There are perhaps two main sources of inefficiency, one is that the app generates random values at every point in a secure yet inefficient way (the private key from a key pair), and secondly that the code has to decrypt all packets with every movement.
 
@@ -90,5 +94,5 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 Many thanks to the following people:
 
 - Anuj Gupta, the researcher who shared this idea with me.
-- ChatGPT
+- AI coding assistants (Claude, ChatGPT) used along the way.
 - Everyone at the Decentralized Gaming Association [DGA Discord](https://discord.com/invite/eZEVrSd)
