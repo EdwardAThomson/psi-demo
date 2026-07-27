@@ -8,6 +8,8 @@ There is a live demo here: [PSI Demo @ Vercel](https://psi-demo-delta.vercel.app
 
 See the [project roadmap](./ROADMAP.md) for what's shipped and what's planned next.
 
+> **C++ implementation:** there is a C++ port of this project at [EdwardAThomson/Private-Set-Intersection](https://github.com/EdwardAThomson/Private-Set-Intersection). It is the more actively developed implementation: the security fixes below landed there first, and it additionally has multithreaded scalar operations, a coarse-to-fine multi-level mesh cascade, an HTTP server for frontend integration, and benchmarking tools. This JS repo is the browser-native demo and is kept in protocol parity with it (same group, same hash-to-group, same membership-tag construction).
+
 **Recent updates:** Ported two security fixes and a protocol improvement from the C++ port ([Private-Set-Intersection](https://github.com/EdwardAThomson/Private-Set-Intersection)). The hash-to-group function now produces points with unknown discrete log (ristretto255 element derivation from SHA-512, matching libsodium's `crypto_core_ristretto255_from_hash`); the old `H(x)*G` construction let a participant recover `b*G` from one run and enumerate the other set offline. Wire messages no longer carry any plaintext element; they contain only fixed 32-byte values (membership tags, blinded points, transformed points). Bob now sends one-way BLAKE3 membership tags instead of ciphertexts, so finalisation is O(A) hash lookups with no trial decryption. This is a breaking wire-format change.
 
 **Threat model:** the protocol is private against honest-but-curious participants; a malicious participant can probe membership with fabricated inputs.
