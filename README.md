@@ -8,7 +8,9 @@ There is a live demo here: [PSI Demo @ Vercel](https://psi-demo-delta.vercel.app
 
 See the [project roadmap](./ROADMAP.md) for what's shipped and what's planned next.
 
-**Recent updates:** Removed dead code throughout the app and fixed the production build. Create React App treats lint warnings as errors when `CI=true` (Vercel's default), which had been failing the build and taking the live site offline; the cleanup restores a clean deployment.
+**Recent updates:** Ported two security fixes and a protocol improvement from the C++ port ([Private-Set-Intersection](https://github.com/EdwardAThomson/Private-Set-Intersection)). The hash-to-group function now produces points with unknown discrete log (ristretto255 element derivation from SHA-512, matching libsodium's `crypto_core_ristretto255_from_hash`); the old `H(x)*G` construction let a participant recover `b*G` from one run and enumerate the other set offline. Wire messages no longer carry any plaintext element; they contain only fixed 32-byte values (membership tags, blinded points, transformed points). Bob now sends one-way BLAKE3 membership tags instead of ciphertexts, so finalisation is O(A) hash lookups with no trial decryption. This is a breaking wire-format change.
+
+**Threat model:** the protocol is private against honest-but-curious participants; a malicious participant can probe membership with fabricated inputs.
 
 ## Description
 This code is a simple demonstration of how PSI calculations work.
@@ -23,12 +25,14 @@ The overall top-level strategy is outlined in a blog I wrote in June 2020: [Prev
 
 Here are a few of the technical Implementation choices that I made in this app.
 
-* ChaCha20 Stream Cipher
-* Blake3 hash function
+* ristretto255 group ([@noble/curves](https://github.com/paulmillr/noble-curves)), with hash-to-group via SHA-512 and RFC 9496 element derivation (unknown discrete log)
+* BLAKE3 one-way membership tags ([@noble/hashes](https://github.com/paulmillr/noble-hashes)), derive-key mode with context `PSI-membership-tag-v1`
 * Multi-level grid system
 * Web workers
 
-These were picked for their speed of operation or to otherwise reduce overheads. In the future I probably need to look to Wasm, or otherwise creating a desktop app.
+These were picked for their speed of operation or to otherwise reduce overheads. Every wire entry is a fixed 32-byte value; no plaintext positions travel between the parties. In the future I probably need to look to Wasm, or otherwise creating a desktop app.
+
+Run `npm run selftest` to check the protocol core (correct intersection, empty intersection for disjoint sets, and no input element appearing in any serialized message).
 
 ### PSI Explainer
 I put together a page that explains more of the details of what PSI is and how it works: [PSI Explainer](./explanations/psi_explainer.md).
@@ -45,9 +49,7 @@ This is a simple visualization of simple point particles moving around inside a 
 
 In order to boost performance, the app converts positions and visibility to cells, which are a coarser representation of the pixels. 1 cell is 50x50 pixels. I later added multi-level meshing and web workers to boost performance. While the performance is much better, it is still a bit slow.
 
-There are perhaps two main sources of inefficiency, one is that the app generates random values at every point in a secure yet inefficient way (the private key from a key pair), and secondly that the code has to decrypt all packets with every movement.
-
-The first can be solved by generating one random value then hashing it for the other points. The second may require reducing key size since the period of a game only requires secrecy for a few hours at most in an RTS. Slower games don't require fast visualization, so it would be fine to have such key-length redundancy (consider strategy games like Civilization).
+With the tag-based protocol, finalisation is a set lookup per Alice element rather than trial decryption of every packet, which removes the old quadratic step. The remaining cost is the elliptic curve scalar multiplications, which scale linearly with the number of cells.
 
 ![PSI Visualization](explanations/PSI_Visualization_20241006.png)
 
