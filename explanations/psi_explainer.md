@@ -20,6 +20,8 @@ Here is a deeper dive into the protocol details. As it is a pain to copy and pas
 
 ![PSI Protocol Deatails](psi_details.png)
 
+Note: the screenshot describes the classical formulation, in which Bob encrypts each position under its derived key and Alice trial-decrypts. This implementation uses membership tags instead (see below), which answer the same "do our keys match?" question with a single hash comparison.
+
 
 ## Key Concepts
 
@@ -37,12 +39,10 @@ HashToGroup is conceptually similar to HashToCurve, as seen in VRFs, but they ar
 ### The H2 Function in the PSI Protocol (PSI Demo):
 
 **Purpose**
-The **H2** function in the PSI protocol is designed to map elliptic curve points to a fixed-size bit string (often used for encryption, MACs, or comparison purposes). This bit string could, for instance, be used as a symmetric key in an encryption scheme like AES or for hashing data in a PSI protocol.
-
-It doesn't generate a scalar like in your VRF code, but instead hashes an elliptic curve point (or some other data) to a string of bits.
+The **H2** function in the PSI protocol maps elliptic curve points to a fixed-size bit string, used here as the per-element key material from which the membership tag is derived. (In the classical formulation the same bit string served as a symmetric encryption key; this demo derives a one-way tag from it instead.)
 
 **Process**
-The input (which is often an elliptic curve point, or something derived from it) is hashed to a bit string (e.g., using SHA-256 or SHA-512). This bit string could then be used as a key, for example.
+The 32-byte canonical encoding of the curve point is hashed with SHA-512 and truncated to 32 bytes.
 
 
 ### Elliptic Curve Choice:

@@ -1,6 +1,6 @@
 # Roadmap — Private Set Intersection Demo
 
-_Status: active · updated 2026-06-02_
+_Status: active · updated 2026-07-27_
 
 A React demo of the Private Set Intersection protocol from *OpenConflict: Preventing
 Real Time Map Hacks in Online Games* — interactive visualization, a roguelike demo,
@@ -13,8 +13,9 @@ and a raw-calculation walkthrough. The C++ port lives in the sibling `PSI_Cpp` r
 - [x] Multi-level grid system (coarse + fine mesh for large datasets)
 - [x] Web Worker integration to offload crypto and keep the UI responsive
 - [x] Roguelike demo game (PSI decides which monsters are visible vs hidden)
-- [x] Explainer docs (EC math, hash-to-group, H2 function, ChaCha20)
-- [x] Cryptographic primitives (ChaCha20-Poly1305, Blake3, p256 EC, key derivation)
+- [x] Explainer docs (EC math, hash-to-group, H2 function, membership tags)
+- [x] Cryptographic primitives (ristretto255 group, SHA-512 key derivation, BLAKE3 membership tags)
+- [x] Safer curve choice (replaced NIST P-256 and the `H(x)*G` mapping with ristretto255)
 - [x] Live deployment on Vercel
 - [x] Multi-page SPA navigation (Home, Visualization, Roguelike, Raw Calculation)
 - [x] Remove dead code (unused vars/functions; fixes the `CI=true` Vercel build)
@@ -22,7 +23,7 @@ and a raw-calculation walkthrough. The C++ port lives in the sibling `PSI_Cpp` r
 ## Next
 
 - [ ] Optimize random-value generation (single seed + hash chain vs per-unit keygen)
-- [ ] Reduce visualization lag from per-movement decryption overhead
+- [ ] Reduce visualization lag from per-movement protocol overhead (scalar multiplications)
 
 ## Backlog
 
@@ -30,4 +31,3 @@ and a raw-calculation walkthrough. The C++ port lives in the sibling `PSI_Cpp` r
 - [ ] Desktop-app alternative to the browser approach
 - [ ] Dispute-resolution protocol
 - [ ] End-of-game position / visibility verification (audit against rules)
-- [ ] Smaller / safer EC keys (reduce key size; consider SafeCurves over p256)
