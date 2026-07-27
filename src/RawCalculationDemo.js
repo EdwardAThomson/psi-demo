@@ -44,20 +44,12 @@ const RawCalculationDemo = () => {
     });
   };
 
-  // Helper function to format encrypted values
-  const formatEncryptedValue = (value) => {
-    if (typeof value === 'string') {
-      // For strings, show first few and last few characters
-      if (value.length > 20) {
-        return `${value.substring(0, 10)}...${value.substring(value.length - 5)}`;
-      }
-      return value;
-    } else if (value && typeof value === 'object') {
-      // For objects, show a simplified representation
-      return "Encrypted data";
-    } else {
-      return String(value);
+  // Helper function to shorten 32-byte hex values for display
+  const formatHexValue = (value) => {
+    if (typeof value === 'string' && value.length > 20) {
+      return `${value.substring(0, 10)}...${value.substring(value.length - 5)}`;
     }
+    return String(value);
   };
 
   return (
@@ -72,8 +64,10 @@ const RawCalculationDemo = () => {
       </h1>
       
       <p style={{ fontSize: '16px', lineHeight: '1.5', color: '#555' }}>
-        This demo shows the original implementation of the PSI protocol with static unit positions.
-        Click the button below to run the calculation and see the results.
+        This demo runs the PSI protocol with static unit positions. Bob sends a one-way
+        membership tag per element, Alice sends blinded curve points, and neither message
+        contains any position in the clear. Click the button below to run the calculation
+        and see the results.
       </p>
       
       <div style={{ marginBottom: '30px', textAlign: 'center' }}>
@@ -128,27 +122,27 @@ const RawCalculationDemo = () => {
             ))}
           </ul>
           
-          <h3 style={{ color: '#2980b9', marginTop: '20px' }}>Encrypted Values</h3>
+          <h3 style={{ color: '#2980b9', marginTop: '20px' }}>Membership Tags (sent over the wire)</h3>
           {bobValues.length > 0 ? (
-            <div style={{ 
-              backgroundColor: '#eef2f7', 
-              padding: '10px', 
+            <div style={{
+              backgroundColor: '#eef2f7',
+              padding: '10px',
               borderRadius: '4px',
               maxHeight: '200px',
               overflowY: 'auto'
             }}>
               <p style={{ margin: '0 0 10px 0', fontStyle: 'italic', color: '#7f8c8d' }}>
-                {bobValues.length} values encrypted
+                {bobValues.length} one-way tags (32 bytes each)
               </p>
               {bobValues.slice(0, 5).map((value, index) => (
-                <div key={index} style={{ 
-                  padding: '8px', 
-                  backgroundColor: '#fff', 
+                <div key={index} style={{
+                  padding: '8px',
+                  backgroundColor: '#fff',
                   marginBottom: '5px',
                   borderRadius: '4px',
                   boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
                 }}>
-                  {formatEncryptedValue(value)}
+                  {formatHexValue(value.tag)}
                 </div>
               ))}
               {bobValues.length > 5 && (
@@ -159,7 +153,7 @@ const RawCalculationDemo = () => {
             </div>
           ) : (
             <p style={{ color: '#7f8c8d', fontStyle: 'italic' }}>
-              No encrypted values yet. Click "Run PSI Protocol".
+              No tags yet. Click "Run PSI Protocol".
             </p>
           )}
         </div>
@@ -182,27 +176,28 @@ const RawCalculationDemo = () => {
             ))}
           </ul>
           
-          <h3 style={{ color: '#27ae60', marginTop: '20px' }}>Encrypted Values</h3>
+          <h3 style={{ color: '#27ae60', marginTop: '20px' }}>Blinded Points (sent over the wire)</h3>
           {aliceValues.length > 0 ? (
-            <div style={{ 
-              backgroundColor: '#eef7ee', 
-              padding: '10px', 
+            <div style={{
+              backgroundColor: '#eef7ee',
+              padding: '10px',
               borderRadius: '4px',
               maxHeight: '200px',
               overflowY: 'auto'
             }}>
               <p style={{ margin: '0 0 10px 0', fontStyle: 'italic', color: '#7f8c8d' }}>
-                {aliceValues.length} values encrypted
+                {aliceValues.length} blinded points with Bob's transformed replies
               </p>
               {aliceValues.slice(0, 5).map((value, index) => (
-                <div key={index} style={{ 
-                  padding: '8px', 
-                  backgroundColor: '#fff', 
+                <div key={index} style={{
+                  padding: '8px',
+                  backgroundColor: '#fff',
                   marginBottom: '5px',
                   borderRadius: '4px',
                   boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
                 }}>
-                  {formatEncryptedValue(value)}
+                  <div>blinded: {formatHexValue(value.blindedPoint)}</div>
+                  <div>transformed: {formatHexValue(value.transformedPoint)}</div>
                 </div>
               ))}
               {aliceValues.length > 5 && (
@@ -213,7 +208,7 @@ const RawCalculationDemo = () => {
             </div>
           ) : (
             <p style={{ color: '#7f8c8d', fontStyle: 'italic' }}>
-              No encrypted values yet. Click "Run PSI Protocol".
+              No blinded points yet. Click "Run PSI Protocol".
             </p>
           )}
         </div>

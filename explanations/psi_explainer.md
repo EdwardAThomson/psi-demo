@@ -8,9 +8,9 @@ In our example, Alice and Bob are both players in a mock RTS game. Each player h
 How It Works:
 1. **Key Exchange**: Alice and Bob begin by following a protocol that enables them to generate and exchange cryptographic keys. This is the foundation for ensuring the privacy of their data throughout the process.
 
-2. **Encrypting Units**: Alice encrypts her units using her key, and Bob does the same with his. After this, they swap their encrypted units. Even though they receive each other’s units, the encryption ensures that neither party can understand the data.
+2. **Tagging and Blinding**: Bob derives a secret key per unit (by multiplying the unit's curve point by his private scalar) and sends a one-way membership tag of each key. Alice blinds each of her units with an independent random scalar and sends the blinded curve points. Neither message contains any unit position in the clear; every wire entry is a fixed 32-byte value.
 
-3. **Intersection Identification**: Alice attempts to decrypt Bob's units using the key exchange protocol. If Bob’s unit is also present in Alice’s list, the decryption will reveal it. This is done without Alice learning any other details about Bob's remaining units, ensuring privacy is maintained.
+3. **Intersection Identification**: Bob multiplies Alice's blinded points by his private scalar and returns them. Alice unblinds each reply with the modular inverse of her random scalar, recomputes the tag, and checks it against Bob's tag set. A match at index i means her own unit i is in the intersection. She learns nothing about Bob's non-matching units, and Bob learns nothing about hers.
 
 By the end of this protocol, both Alice and Bob only know about the units they have in common, without exposing any other information.
 
@@ -19,6 +19,8 @@ By the end of this protocol, both Alice and Bob only know about the units they h
 Here is a deeper dive into the protocol details. As it is a pain to copy and paste the text from ChatGPT, it is easier to provide a screenshot:
 
 ![PSI Protocol Deatails](psi_details.png)
+
+Note: the screenshot describes the classical formulation, in which Bob encrypts each position under its derived key and Alice trial-decrypts. This implementation uses membership tags instead (see below), which answer the same "do our keys match?" question with a single hash comparison.
 
 
 ## Key Concepts
@@ -32,37 +34,31 @@ The goal is to take some arbitrary input, like a string, and map it deterministi
 
 HashToGroup is conceptually similar to HashToCurve, as seen in VRFs, but they are slightly different.
 
+**Important**: the construction matters. This demo originally computed `H1(x) = H(x)*G`, a hash used as a scalar times the generator. That means the discrete log of every mapped point is public, which breaks the protocol: after one run a participant can recover `b*G` and enumerate the other party's set offline. The current implementation hashes the element with SHA-512 and maps the 64 uniform bytes to a ristretto255 point via RFC 9496 element derivation (the same construction as libsodium's `crypto_core_ristretto255_from_hash`), so the output point has an unknown discrete log.
+
 ### The H2 Function in the PSI Protocol (PSI Demo):
 
 **Purpose**
-The **H2** function in the PSI protocol is designed to map elliptic curve points to a fixed-size bit string (often used for encryption, MACs, or comparison purposes). This bit string could, for instance, be used as a symmetric key in an encryption scheme like AES or for hashing data in a PSI protocol.
-
-It doesn't generate a scalar like in your VRF code, but instead hashes an elliptic curve point (or some other data) to a string of bits.
+The **H2** function in the PSI protocol maps elliptic curve points to a fixed-size bit string, used here as the per-element key material from which the membership tag is derived. (In the classical formulation the same bit string served as a symmetric encryption key; this demo derives a one-way tag from it instead.)
 
 **Process**
-The input (which is often an elliptic curve point, or something derived from it) is hashed to a bit string (e.g., using SHA-256 or SHA-512). This bit string could then be used as a key, for example.
+The 32-byte canonical encoding of the curve point is hashed with SHA-512 and truncated to 32 bytes.
 
 
 ### Elliptic Curve Choice:
 
-#### p256
+#### ristretto255
 
-Also known as prime256v1 or NIST P-256, this curve is part of the NIST (National Institute of Standards and Technology) recommended curves.
-
-It is considered to be potentially backdoored by many professional cryptographers. It is fine for demonstration purposes, but may not be wise in a production setting (when you fear US government snooping).
-
+The demo uses [ristretto255](https://ristretto.group/), a prime-order group built on Curve25519. It was chosen because it provides a standard, safe hash-to-group construction (RFC 9496 element derivation from 64 uniform bytes) with no known discrete log, it has no cofactor edge cases, and every point encodes to a fixed 32 bytes. Earlier versions of this demo used NIST P-256 with an insecure `H(x)*G` mapping; see the HashToGroup section above for why that was replaced.
 
 There is a website that digs into curve safety run by Daniel J. Bernstein and Tanja Lange: [SafeCurves: choosing safe curves for elliptic-curve cryptography](https://safecurves.cr.yp.to/).
 
-#### secp256k
+### Membership tags instead of encryption:
 
-This curve is known for being used in Bitcoin, Ethereum and other cryptocurrencies. It's not part of the NIST family but was defined by SECG (Standards for Efficient Cryptography Group) in SEC 2.
+Earlier versions encrypted each of Bob's unit positions under the derived key (ChaCha20/secretbox) and had Alice trial-decrypt every ciphertext with every candidate key, an O(A*B) step that also leaked each element's length through the ciphertext size.
 
-It has the same 128-bit security level as p256, but it's optimized for certain mathematical operations like elliptic curve multiplications, so should be more performant, which is why it's popular in the blockchain world.
+The current protocol sends a one-way membership tag per element instead: BLAKE3 in derive-key mode with the context string `PSI-membership-tag-v1` over the 32-byte derived key. Alice hashes her recomputed keys the same way and checks membership in a set of Bob's tags, which is O(A) lookups. Tags are fixed 32-byte values, so nothing about the underlying element (not even its length) is revealed. Since Alice matches a tag at her own index i, she knows the intersecting element is her own input i, so no decryption is needed at all.
 
-### Encrypting units via symmetric encryption:
+### Threat model
 
-#### Stream Cipher ChaCha20
-Using a stream cipher like [ChaCha20](https://en.wikipedia.org/wiki/Salsa20) is an excellent choice for encrypting and decrypting data, as it’s fast, secure, and widely used in cryptographic systems. In the context of the PSI protocol, Bob will encrypt his unit positions, and Alice will attempt to decrypt the ciphertexts using the keys she calculates during the protocol.
-
-Block ciphers like AES are more heavyweight so are naturally slower than stream ciphers. For gaming, we need speed while being secure enough.
+The protocol is private against honest-but-curious participants. A malicious participant can probe membership with fabricated inputs (claiming positions they do not hold); preventing that requires a commitment and dispute-resolution layer on top, as discussed in the README.
