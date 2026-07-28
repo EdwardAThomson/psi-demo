@@ -42,7 +42,10 @@ I put together a page that explains more of the details of what PSI is and how i
 ## Using This App
 
 ### Home Page
-A demonstration of the protocol working. The units and visibility are static / simple points. Just hit the "Run" button. 
+A landing page that describes the app and links to each of the demos below.
+
+### Raw Calculation Demo
+A demonstration of the protocol working. The units and visibility are static / simple points. Just hit the "Run PSI Protocol" button.
 
 ![PSI Protocol Demo](explanations/Home_Page_Screenshot_20241006.png)
 

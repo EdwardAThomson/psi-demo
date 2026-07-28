@@ -4,7 +4,7 @@
 
 1. worker.js:
     - This is the main worker file that runs in a separate thread
-    - Contains the complete PSI implementation including the cryptographic operations
+    - Runs the PSI protocol phases; the cryptographic implementation itself lives in psiCore.mjs, which the worker imports
     - Handles messages from the main thread and sends back results
     - This is the file that actually executes in the web worker context
 2. workerAdapter.js:
